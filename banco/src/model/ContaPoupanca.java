@@ -1,12 +1,13 @@
 package model;
 
 public class ContaPoupanca extends Conta {
-    public ContaPoupanca(int numero) {
-        super(numero, "Poupança");
+
+    public ContaPoupanca(int numero, String nome, String cpf) {
+        super(numero, "Poupança", nome, cpf);
     }
 
     @Override
     public String consultarDetalhes() {
-        return "Conta Poupança - Número: " + getNumero() + ", Saldo: R$" + getSaldo();
+        return "Conta Poupança - Saldo: " + getSaldo();
     }
 }

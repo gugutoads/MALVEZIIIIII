@@ -5,6 +5,10 @@ import controller.BancoController;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+
+import model.Conta; // Para utilizar o modelo de Conta
+import utils.DataManager; // Para carregar as contas
 
 public class MenuFuncionario extends JFrame {
     private BancoController bancoController;
@@ -107,8 +111,69 @@ public class MenuFuncionario extends JFrame {
     }
 
     public void consultarConta() {
-        JOptionPane.showMessageDialog(this, "Consultar Conta");
+        // Tela de consulta de conta
+        JFrame frame = new JFrame("Consultar Conta");
+        frame.setSize(400, 250);
+        frame.setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel();
+        frame.add(panel);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JLabel labelNumeroConta = new JLabel("Número da Conta:");
+        JTextField tfNumeroConta = new JTextField(15);
+        JButton btnConsultar = new JButton("Consultar");
+
+        panel.add(labelNumeroConta);
+        panel.add(tfNumeroConta);
+        panel.add(btnConsultar);
+
+        // Ação do botão para consultar a conta
+        btnConsultar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String numeroConta = tfNumeroConta.getText().trim();
+
+                if (numeroConta.isEmpty()) {
+                    JOptionPane.showMessageDialog(frame, "O número da conta deve ser preenchido.");
+                    return;
+                }
+
+                try {
+                    // Tentar carregar as contas do arquivo
+                    List<Conta> contas = DataManager.carregarContas("contas.dat");
+
+                    // Procurar a conta pelo número
+                    boolean contaEncontrada = false;
+                    for (Conta conta : contas) {
+                        if (String.valueOf(conta.getNumero()).equals(numeroConta)) {
+                            // Exibir os detalhes da conta, incluindo nome e CPF
+                            JOptionPane.showMessageDialog(frame,
+                                    "Número da Conta: " + conta.getNumero() + "\n" +
+                                            "Nome: " + conta.getNome() + "\n" +
+                                            "CPF: " + conta.getCpf() + "\n" +
+                                            "Tipo de Conta: " + conta.getTipoConta() + "\n" +
+                                            "Saldo: " + conta.getSaldo() + "\n" +
+                                            conta.consultarDetalhes());
+                            contaEncontrada = true;
+                            break;
+                        }
+                    }
+
+                    if (!contaEncontrada) {
+                        JOptionPane.showMessageDialog(frame, "Conta não encontrada.");
+                    }
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(frame, "Erro ao consultar a conta: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        frame.setVisible(true);
     }
+
 
     public void alterarDados() {
         JOptionPane.showMessageDialog(this, "Alterar Dados");
@@ -122,4 +187,3 @@ public class MenuFuncionario extends JFrame {
         JOptionPane.showMessageDialog(this, "Gerar Relatórios");
     }
 }
-
