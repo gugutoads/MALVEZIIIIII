@@ -3,13 +3,13 @@ package model;
 public class ContaCorrente extends Conta {
     private double limite;
 
-    public ContaCorrente(int numero, double limite) {
-        super(numero, "Corrente");
+    public ContaCorrente(int numero, String nome, String cpf, double limite) {
+        super(numero, "Corrente", nome, cpf);
         this.limite = limite;
     }
 
     @Override
     public String consultarDetalhes() {
-        return "Conta Corrente - Número: " + getNumero() + ", Saldo: R$" + getSaldo() + ", Limite: R$" + limite;
+        return "Limite: " + limite;
     }
 }
